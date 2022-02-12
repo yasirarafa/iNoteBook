@@ -1,10 +1,13 @@
 const connectToMongo = require('./db');
 const express = require('express');
+var cors = require('cors')
 const UserRouter  = require('./routes/auth');
 const NotesRouter = require ('./routes/notes');
 const app = express();
-app.use(express.json())
 const port  = 5000;
+
+app.use(cors())
+app.use(express.json())
 
 // Available Routes
 app.use('/api/auth', UserRouter)
