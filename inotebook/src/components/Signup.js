@@ -20,14 +20,13 @@ const response = await fetch(
       body: JSON.stringify({name, email, password}),
     });
     const json = await response.json();
-    console.log('Jon>>>>>', json);
     if(json.success) {
         // Save the auth token and redirect
         localStorage.setItem('token', json.authToken);
         props.showAlert("Signup Successfully", "success");
         history.push("/")
     } else{
-        alert('Some thing went wrong')
+      props.showAlert("Invalid Details", "danger");
     }
 }
 
@@ -37,7 +36,8 @@ const response = await fetch(
 
     }
     return (
-        <div className="container">
+        <div className="container mt-2">
+          <h2>Create an account to use iNotebook</h2>
             <form onSubmit={handleSubmit}>
             <div className="mb-3">
     <label for="name" className="form-label">Name</label>

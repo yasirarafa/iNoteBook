@@ -1,23 +1,30 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router";
 import noteContext from "../context/notes/noteContext";
 import AddNote from "./AddNote";
 import Noteitem from "./Noteitem";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, addNote, getNotes, editNote } = context;
   const [note, setNote] = useState({id: "", etitle: "", edescription: "", etag: ""});
   const ref = useRef(null);
-  const refClose = useRef(null)
+  const refClose = useRef(null);
+  let history = useHistory();
 
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('token')) {
+      getNotes();
+    } else{
+      history.push("/login");
+    }
   }, []);
 
   const handleClick = (e) => {
       console.log('Handle click update', note);
       editNote(note.id, note.etitle, note.edescription, note.etag);
       ref.current.click();
+      props.showAlert("Updated Successfuly", "success");
   }
 
   const onChange = (e) => {
@@ -31,7 +38,7 @@ const Notes = () => {
 
   return (
     <>
-      <AddNote />
+      <AddNote showAlert={props.showAlert} />
       <button
         ref={ref}
         type="button"
@@ -132,7 +139,7 @@ const Notes = () => {
         </div>
         {notes.map((note) => {
           return (
-            <Noteitem key={note._id} updateNote={updateNote} note={note} />
+            <Noteitem key={note._id} updateNote={updateNote} showAlert={props.showAlert} note={note} />
           );
         })}
       </div>
